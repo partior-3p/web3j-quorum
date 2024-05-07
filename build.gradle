@@ -2,12 +2,12 @@ plugins {
     id 'java'
     id 'idea'
     id 'jacoco'
-    id "com.diffplug.gradle.spotless" version "3.25.0"
+    id 'com.diffplug.gradle.spotless' version '4.5.1'
     id 'io.codearte.nexus-staging' version '0.21.1'
-    id "de.marcphilipp.nexus-publish" version "0.4.0"
-    id 'org.jetbrains.kotlin.jvm' version '1.3.60'
-    id 'org.unbroken-dome.test-sets' version '2.2.0'
-    id "de.undercouch.download" version "4.0.0"
+    id 'de.marcphilipp.nexus-publish' version '0.4.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.22'
+    id 'org.unbroken-dome.test-sets' version '4.0.0'
+    id 'de.undercouch.download' version '5.2.0'
 }
 
 
@@ -22,7 +22,7 @@ apply {
         'publish',
         'spotless',
     ].each { buildScript ->
-        download {
+        download.run {
             src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
             dest "$rootDir/gradle/$buildScript/build.gradle"
             overwrite false
@@ -41,10 +41,20 @@ publishing {
     }
 }
 
+dependencyLocking {
+    lockAllConfigurations()
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8",
             "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinVersion",
-            "org.web3j:core:$web3jCoreVersion"
+
+            implementation("org.web3j:core:$web3jCoreVersion") {
+                exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
+                exclude group: "com.squareup", module: "okio"
+            }
+    implementation("org.bouncycastle:bcprov-jdk18on:$jdk18onVersion")
+    implementation("com.squareup.okio:okio:$okioVersion")
 
     testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion",
             "ch.qos.logback:logback-core:$logbackVersion",
@@ -63,12 +73,12 @@ tasks.withType(Test) {
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 compileTestKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 testSets {
@@ -77,4 +87,4 @@ testSets {
     }
 }
 integrationTest.mustRunAfter test
-compileIntegrationTestKotlin { kotlinOptions.jvmTarget = '1.8' }
+compileIntegrationTestKotlin { kotlinOptions.jvmTarget = '17' }
