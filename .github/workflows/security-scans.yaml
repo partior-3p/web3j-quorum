@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
   schedule:
-  # Runs daily at 00:30 - need to convert to UTC+8 (Singapore)
-  - cron: 30 16 * * *
+  # Runs daily at 1:00AM UTC+8 (Singapore)
+  - cron: 0 17 * * *
 
 jobs:
   security-pipeline: 
