@@ -55,6 +55,7 @@ dependencies {
             }
     implementation("org.bouncycastle:bcprov-jdk18on:$jdk18onVersion")
     implementation("com.squareup.okio:okio:$okioVersion")
+    implementation("org.bouncycastle:bcprov-jdk15on:$jdk15onVersion")
 
     testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion",
             "ch.qos.logback:logback-core:$logbackVersion",
