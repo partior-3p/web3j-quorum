@@ -82,6 +82,10 @@ nexusStaging {
 }
 
 
+signing {
+    useGpgCmd()
+    sign publishing.publications
+}
 // signing {
 //     sign publishing.publications.maven
 //     def signingKey = new File("$rootDir/web3j.asc")
